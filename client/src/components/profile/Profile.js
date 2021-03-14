@@ -75,7 +75,7 @@ const ProfileForm = ({
             <small>* = required field</small>
             <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
-                    <select name="status" value={status} onChange={onChange}>
+                    <select name="currentProject" value={currentProject} onChange={onChange}>
                     <option>* Select Project Status</option>
                         <option value="Little Projects">Little Projects</option>
                         <option value="Big Project">Big Project</option>
