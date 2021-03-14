@@ -29,5 +29,54 @@ router.get('/', auth, async (req, res) => {
 });
 
 
+//# route:  POST api/auth
+//? desc:   Authenticate user & get token
+//! access: Public
+router.post('/',
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists(),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
+        const { email, password } = req.body;
+
+        try {
+            let user = await User.findOne({ email });
+
+            if (!user) { //! if there is not a user we want to send an error
+                return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+            }
+
+//# make sure the password matches the saved password through .compare()
+
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if (!isMatch) {//! if no pw match we want to send an error
+                return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+            }
+
+            const payload = {
+                user: {
+                    id: user.id
+                }
+            };
+
+            jwt.sign(
+                payload,
+                config.get('jwtSecret'),
+                { expiresIn: '5 days' },
+                (err, token) => {
+                    if (err) throw err;
+                    res.json({ token });
+                }
+            );
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server error');
+        }
+    }
+);
 module.exports = router;
