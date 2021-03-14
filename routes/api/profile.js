@@ -8,10 +8,25 @@ const { check, validationResult } = require('express-validator');
 const normalize = require('normalize-url');
 const checkObjectId = require('../../middleware/checkObjectId');
 
+
+
 //* Database
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 // const Post = require('../../models/Post');
+
+//# Table of contents
+/* 
+*   Get current users profile - line
+*   Create or update user profile - line
+*   Get all profiles
+*   Get profile by user ID
+*   Delete profile, user & posts
+*   Add profile projects
+*   Delete project from profile
+*   Add profile hobbies
+*   Delete hobby from profile
+ */
 
 
 //* route:  Get api/profile/me
@@ -255,6 +270,7 @@ router.delete('/hobbies/:hob_id', auth, async (req, res) => {
         return res.status(500).json({ msg: 'Server error' });
     }
 });
+
 
 
 module.exports = router;
