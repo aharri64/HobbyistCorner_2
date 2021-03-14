@@ -155,4 +155,27 @@ router.delete('/', auth, async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+
+//* route:  PUT api/profile/projects
+//? desc:   Add profile projects
+//! access: Private
+
+
+//* route:  DELETE api/profile/projects/:proj_id
+//? desc:   Delete project from profile
+//! access: Private
+
+
+//* route:  PUT api/profile/hobbies
+//? desc:   Add profile hobbies
+//! access: Private
+
+
+//* route:  DELETE api/profile/hobbies/:hob_id
+//? desc:   Delete hobby from profile
+//! access: Private
+
+
+
 module.exports = router;
