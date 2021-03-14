@@ -140,12 +140,12 @@ router.get('/user/:user_id', checkObjectId('user_id'),
 //! access: Private
 router.delete('/', auth, async (req, res) => {
     try {
-    // Remove user posts
-    // Remove profile
-    // Remove user
         await Promise.all([
-            Post.deleteMany({ user: req.user.id }),
+            //# Remove user posts
+            // Post.deleteMany({ user: req.user.id }),
+            //# Remove profile
             Profile.findOneAndRemove({ user: req.user.id }),
+            //# Remove user
             User.findOneAndRemove({ _id: req.user.id })
         ]);
 
@@ -160,12 +160,51 @@ router.delete('/', auth, async (req, res) => {
 //* route:  PUT api/profile/projects
 //? desc:   Add profile projects
 //! access: Private
-
+router.put('/projects', auth,
+    check('projectName', 'Project name is required').notEmpty(),
+    check('genre', 'Hobby genre is required').notEmpty(),
+    check('from', 'From date is required and needs to be from the past')
+        .notEmpty()
+        .custom((value, { req }) => (req.body.to ? value < req.body.to : true)),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+  
+        try {
+            const profile = await Profile.findOne({ user: req.user.id });
+    
+            profile.project.unshift(req.body);
+    
+            await profile.save();
+    
+            res.json(profile);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+    }
+);
 
 //* route:  DELETE api/profile/projects/:proj_id
 //? desc:   Delete project from profile
 //! access: Private
+router.delete('/projects/:proj_id', auth, async (req, res) => {
+    try {
+        const foundProfile = await Profile.findOne({ user: req.user.id });
+    
+        foundProfile.project = foundProfile.project.filter(
+            (proj) => proj._id.toString() !== req.params.proj_id
+        );
 
+        await foundProfile.save();
+        return res.status(200).json(foundProfile);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ msg: 'Server error' });
+    }
+});
 
 //* route:  PUT api/profile/hobbies
 //? desc:   Add profile hobbies

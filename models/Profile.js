@@ -27,13 +27,13 @@ const ProfileSchema = new Schema({
     bio: {
         type: String
     },
-    Projects: [
+    project: [
         {
             projectName: {
                 type: String,
                 required: true
             },
-            hobby: {
+            genre: {
                 type: String,
                 required: true
             },
@@ -53,10 +53,13 @@ const ProfileSchema = new Schema({
             },
             description: {
                 type: String
+            },
+            image: {
+                type: String
             }
         }
     ],
-    Hobbies: [
+    hobby: [
         {
             hobbyName: {
                 type: String,
