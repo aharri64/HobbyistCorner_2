@@ -4,17 +4,17 @@ import { connect } from 'react-redux';
 import { deleteHobbies } from '../../actions/profile';
 import formatDate from '../../utils/formatDate';
 
-const Hobbies = ({ hobbies, deleteHobbies }) => {
-    const hobbies = hobbies.map((exp) => (
-        <tr key={exp._id}>
-            <td>{exp.skillLevel}</td>
-            <td className="hide-sm">{exp.hobbyName}</td>
+const Hobbies = ({ hobby, deleteHobbies }) => {
+    const hobbies = hobby.map((hob) => (
+        <tr key={hob._id}>
+            <td>{hob.skillLevel}</td>
+            <td className="hide-sm">{hob.hobbyName}</td>
             <td>
-                {formatDate(exp.from)} - {exp.to ? formatDate(exp.to) : 'Now'}
+                {formatDate(hob.from)} - {hob.to ? formatDate(hob.to) : 'Now'}
             </td>
             <td>
                 <button
-                    onClick={() => deleteHobbies(exp._id)}
+                    onClick={() => deleteHobbies(hob._id)}
                     className="btn btn-danger"
                 >
                     Delete

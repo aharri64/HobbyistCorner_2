@@ -170,7 +170,7 @@ export const deleteProjects = (id) => async (dispatch) => {
 };
 
 // Delete hobby
-export const deleteHobby = (id) => async (dispatch) => {
+export const deleteHobbies = (id) => async (dispatch) => {
     try {
         const res = await api.delete(`/profile/hobbies/${id}`);
 
