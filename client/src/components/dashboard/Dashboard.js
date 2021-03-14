@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DashboardActions from './DashboardActions';
 import Projects from './Projects';
-import Hobbies from './Hobbies';
+import Hobby from './Hobby';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 
 const Dashboard = ({
@@ -27,7 +27,7 @@ const Dashboard = ({
                 <Fragment>
                     <DashboardActions />
                     <Projects projects={profile.projects} />
-                    <Hobbies hobbies={profile.hobbies} />
+                    <Hobby hobby={profile.hobby} />
 
                     <div className="my-2">
                         <button className="btn btn-danger" onClick={() => deleteAccount()}>

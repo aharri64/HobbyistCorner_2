@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { deleteHobbies } from '../../actions/profile';
 import formatDate from '../../utils/formatDate';
 
-const Hobbies = ({ hobby, deleteHobbies }) => {
+const Hobby = ({ hobby, deleteHobbies }) => {
     const hobbies = hobby.map((hob) => (
         <tr key={hob._id}>
             <td>{hob.skillLevel}</td>
@@ -25,7 +25,7 @@ const Hobbies = ({ hobby, deleteHobbies }) => {
 
     return (
         <Fragment>
-            <h2 className="my-2">Hobbies</h2>
+            <h2 className="my-2">Hobby</h2>
             <table className="table">
                 <thead>
                     <tr>
@@ -41,9 +41,9 @@ const Hobbies = ({ hobby, deleteHobbies }) => {
     );
 };
 
-Hobbies.propTypes = {
+Hobby.propTypes = {
     hobbies: PropTypes.array.isRequired,
     deleteHobbies: PropTypes.func.isRequired
 };
 
-export default connect(null, { deleteHobbies })(Hobbies);
+export default connect(null, { deleteHobbies })(Hobby);

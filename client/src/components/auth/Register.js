@@ -5,7 +5,7 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
-const Register = () => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -14,9 +14,9 @@ const Register = () => {
     });
 
     const { name, email, password, password2 } = formData;
-    
+
     const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -37,14 +37,14 @@ const Register = () => {
             <p className="lead">
                 <i className="fas fa-user" /> Create Your Account
             </p>
-            <form className="form" action="create-profile.html">
+            <form className="form" onSubmit={onSubmit}>
                 <div className="form-group">
-                    <input 
-                        type="text" 
-                        placeholder="Name" 
-                        name="name" 
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        name="name"
                         value={name}
-                        onChange={onChange} 
+                        onChange={onChange}
                     />
                 </div>
                 <div className="form-group">
@@ -56,7 +56,8 @@ const Register = () => {
                         onChange={onChange}
                     />
                     <small className="form-text">
-                        This site uses Gravatar so if you want a profile image, use a Gravatar email
+                        This site uses Gravatar so if you want a profile image, use a
+                        Gravatar email
                     </small>
                 </div>
                 <div className="form-group">
@@ -77,14 +78,14 @@ const Register = () => {
                         onChange={onChange}
                     />
                 </div>
-                    <input type="submit" className="btn btn-primary" value="Register" />
+                <input type="submit" className="btn btn-primary" value="Register" />
             </form>
             <p className="my-1">
                 Already have an account? <Link to="/login">Sign In</Link>
             </p>
         </Fragment>
-    )
-}
+    );
+};
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
@@ -96,5 +97,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-// export default Register
 export default connect(mapStateToProps, { setAlert, register })(Register);
