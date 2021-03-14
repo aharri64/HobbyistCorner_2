@@ -7,16 +7,16 @@ import {
     GET_POST,
     ADD_COMMENT,
     REMOVE_COMMENT
-  } from '../actions/types';
-  
-  const initialState = {
+} from '../actions/types';
+
+const initialState = {
     posts: [],
     post: null,
     loading: true,
     error: {}
-  };
-  
-  function postReducer(state = initialState, action) {
+};
+
+function postReducer(state = initialState, action) {
     const { type, payload } = action;
     
     switch (type) {
