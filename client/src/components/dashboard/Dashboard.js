@@ -27,7 +27,7 @@ const Dashboard = ({
                 <Fragment>
                     <DashboardActions />
                     <Projects projects={profile.projects} />
-                    <Hobbies hobbies={profile.education} />
+                    <Hobbies hobbies={profile.hobbies} />
 
                     <div className="my-2">
                         <button className="btn btn-danger" onClick={() => deleteAccount()}>

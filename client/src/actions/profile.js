@@ -151,7 +151,7 @@ export const addHobbies = (formData, history) => async (dispatch) => {
 };
 
 // Delete project
-export const deleteProject = (id) => async (dispatch) => {
+export const deleteProjects = (id) => async (dispatch) => {
     try {
         const res = await api.delete(`/profile/projects/${id}`);
 
@@ -179,7 +179,7 @@ export const deleteHobby = (id) => async (dispatch) => {
             payload: res.data
         });
 
-        dispatch(setAlert('Education Removed', 'success'));
+        dispatch(setAlert('Hobby Removed', 'success'));
     } catch (err) {
         dispatch({
             type: PROFILE_ERROR,
