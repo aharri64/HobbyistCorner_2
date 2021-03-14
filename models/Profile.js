@@ -27,7 +27,7 @@ const ProfileSchema = new Schema({
     bio: {
         type: String
     },
-    project: [
+    projects: [
         {
             projectName: {
                 type: String,
@@ -59,7 +59,7 @@ const ProfileSchema = new Schema({
             }
         }
     ],
-    hobby: [
+    hobbies: [
         {
             hobbyName: {
                 type: String,
