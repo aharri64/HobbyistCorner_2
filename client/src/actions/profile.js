@@ -14,12 +14,12 @@ import {
 export const getCurrentProfile = () => async (dispatch) => {
     try {
         const res = await api.get('/profile/me');
-
+    
         dispatch({
             type: GET_PROFILE,
             payload: res.data
         });
-    } catch (err) {
+        } catch (err) {
         dispatch({
             type: PROFILE_ERROR,
             payload: { msg: err.response.statusText, status: err.response.status }
@@ -104,7 +104,7 @@ export const addProjects = (formData, history) => async (dispatch) => {
             payload: res.data
         });
 
-        dispatch(setAlert('Experience Added', 'success'));
+        dispatch(setAlert('Project Added', 'success'));
 
         history.push('/dashboard');
     } catch (err) {
