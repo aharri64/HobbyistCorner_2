@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import formatDate from '../../utils/formatDate';
 
-const ProfileEducation = ({
-    education: { hobbyName, skillLevel, genre, current, to, from, description }
+const ProfileHobbies = ({
+    hobbies: { hobbyName, skillLevel, genre, current, to, from, description }
 }) => (
     <div>
         <h3 className="text-dark">{hobbyName}</h3>
@@ -22,8 +22,8 @@ const ProfileEducation = ({
     </div>
 );
 
-ProfileEducation.propTypes = {
-    education: PropTypes.object.isRequired
+ProfileHobbies.propTypes = {
+    hobbies: PropTypes.object.isRequired
 };
 
-export default ProfileEducation;
+export default ProfileHobbies;
