@@ -1,242 +1,85 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createProfile, getCurrentProfile } from '../../actions/profile';
+import Spinner from '../layout/Spinner';
+import ProfileTop from './ProfileTop';
+import ProfileAbout from './ProfileAbout';
+import ProfileProjects from './ProfileProjects';
+import ProfileHobbies from './ProfileHobbies';
+import { getProfileById } from '../../actions/profile';
 
-const initialState = {
-    company: '',
-    website: '',
-    location: '',
-    currentProject: '',
-    skills: '',
-    bio: '',
-    twitter: '',
-    facebook: '',
-    linkedin: '',
-    youtube: '',
-    instagram: ''
-};
-
-const ProfileForm = ({
-    profile: { profile, loading },
-    createProfile,
-    getCurrentProfile,
-    history
-}) => {
-    const [formData, setFormData] = useState(initialState);
-
-    const [displaySocialInputs, toggleSocialInputs] = useState(false);
-
+const Profile = ({ getProfileById, profile: { profile }, auth, match }) => {
     useEffect(() => {
-        if (!profile) getCurrentProfile();
-        if (!loading && profile) {
-        const profileData = { ...initialState };
-        for (const key in profile) {
-            if (key in profileData) profileData[key] = profile[key];
-        }
-        for (const key in profile.social) {
-            if (key in profileData) profileData[key] = profile.social[key];
-        }
-        if (Array.isArray(profileData.skills))
-            profileData.skills = profileData.skills.join(', ');
-        setFormData(profileData);
-        }
-    }, [loading, getCurrentProfile, profile]);
-
-    const {
-        company,
-        website,
-        location,
-        currentProject,
-        skills,
-        bio,
-        twitter,
-        facebook,
-        linkedin,
-        youtube,
-        instagram
-    } = formData;
-
-    const onChange = e =>
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const onSubmit = e => {
-        e.preventDefault();
-        createProfile(formData, history, profile ? true : false);
-    };
+        getProfileById(match.params.id);
+    }, [getProfileById, match.params.id]);
 
     return (
         <Fragment>
-            <h1 className="large text-primary">Edit Your Profile</h1>
-            <p className="lead">
-                <i className="fas fa-user" /> Add some changes to your profile
-            </p>
-            <small>* = required field</small>
-            <form className="form" onSubmit={onSubmit}>
-                <div className="form-group">
-                    <select name="currentProject" value={currentProject} onChange={onChange}>
-                    <option>* Select Project Status</option>
-                        <option value="Little Projects">Little Projects</option>
-                        <option value="Big Project">Big Project</option>
-                        <option value="Taking a Break">Taking a Break</option>
-                        <option value="Professional">Professional</option>
-                        <option value="Student or Learning">Student or Learning</option>
-                        <option value="Instructor">Instructor or Teacher</option>
-                        <option value="Intern">Intern</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <small className="form-text">
-                        Give us an idea of where you are at in your Hobbies
-                    </small>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="Company"
-                        name="company"
-                        value={company}
-                        onChange={onChange}
-                    />
-                    <small className="form-text">
-                        Could be your own company or one you work for
-                    </small>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="Website"
-                        name="website"
-                        value={website}
-                        onChange={onChange}
-                    />
-                    <small className="form-text">
-                        Could be your own or a company website
-                    </small>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="Location"
-                        name="location"
-                        value={location}
-                        onChange={onChange}
-                    />
-                    <small className="form-text">
-                        City & state suggested (eg. Boston, MA)
-                    </small>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        placeholder="* Skills"
-                        name="skills"
-                        value={skills}
-                        onChange={onChange}
-                    />
-                    <small className="form-text">
-                        Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
-                    </small>
-                </div>
-                <div className="form-group">
-                    <textarea
-                        placeholder="A short bio of yourself"
-                        name="bio"
-                        value={bio}
-                        onChange={onChange}
-                    />
-                    <small className="form-text">Tell us a little about yourself</small>
-                </div>
-
-                <div className="my-2">
-                    <button
-                        onClick={() => toggleSocialInputs(!displaySocialInputs)}
-                        type="button"
-                        className="btn btn-light"
-                    >
-                        Add Social Network Links
-                    </button>
-                    <span>Optional</span>
-                </div>
-
-                {displaySocialInputs && (
-                    <Fragment>
-                        <div className="form-group social-input">
-                        <i className="fab fa-twitter fa-2x" />
-                        <input
-                            type="text"
-                            placeholder="Twitter URL"
-                            name="twitter"
-                            value={twitter}
-                            onChange={onChange}
-                        />
+            {profile === null ? (
+                <Spinner />
+            ) : (
+                <Fragment>
+                    <Link to="/profiles" className="btn btn-light">
+                        Back To Profiles
+                    </Link>
+                    {auth.isAuthenticated &&
+                        auth.loading === false &&
+                        auth.user._id === profile.user._id && (
+                            <Link to="/edit-profile" className="btn btn-dark">
+                            Edit Profile
+                            </Link>
+                        )}
+                    <div className="profile-grid my-1">
+                        <ProfileTop profile={profile} />
+                        <ProfileAbout profile={profile} />
+                        <div className="profile-exp bg-white p-2">
+                            <h2 className="text-primary">Projects</h2>
+                            {profile.projects.length > 0 ? (
+                                <Fragment>
+                                    {profile.projects.map((projects) => (
+                                        <ProfileProjects
+                                        key={projects._id}
+                                        projects={projects}
+                                        />
+                                    ))}
+                                </Fragment>
+                            ) : (
+                                <h4>No projects</h4>
+                            )}
                         </div>
 
-                        <div className="form-group social-input">
-                        <i className="fab fa-facebook fa-2x" />
-                        <input
-                            type="text"
-                            placeholder="Facebook URL"
-                            name="facebook"
-                            value={facebook}
-                            onChange={onChange}
-                        />
+                        <div className="profile-edu bg-white p-2">
+                        <h2 className="text-primary">Hobbies</h2>
+                        {profile.hobbies.length > 0 ? (
+                            <Fragment>
+                                {profile.hobbies.map((hobbies) => (
+                                    <ProfileHobbies
+                                    key={hobbies._id}
+                                    hobbies={hobbies}
+                                    />
+                                ))}
+                            </Fragment>
+                        ) : (
+                            <h4>No hobbies</h4>
+                        )}
                         </div>
-
-                        <div className="form-group social-input">
-                        <i className="fab fa-youtube fa-2x" />
-                        <input
-                            type="text"
-                            placeholder="YouTube URL"
-                            name="youtube"
-                            value={youtube}
-                            onChange={onChange}
-                        />
-                        </div>
-
-                        <div className="form-group social-input">
-                        <i className="fab fa-linkedin fa-2x" />
-                        <input
-                            type="text"
-                            placeholder="Linkedin URL"
-                            name="linkedin"
-                            value={linkedin}
-                            onChange={onChange}
-                        />
-                        </div>
-
-                        <div className="form-group social-input">
-                        <i className="fab fa-instagram fa-2x" />
-                        <input
-                            type="text"
-                            placeholder="Instagram URL"
-                            name="instagram"
-                            value={instagram}
-                            onChange={onChange}
-                        />
-                        </div>
-                    </Fragment>
-                )}
-
-                <input type="submit" className="btn btn-primary my-1" />
-                <Link className="btn btn-light my-1" to="/dashboard">
-                    Go Back
-                </Link>
-            </form>
+                    </div>
+                </Fragment>
+            )}
         </Fragment>
     );
 };
 
-ProfileForm.propTypes = {
-    createProfile: PropTypes.func.isRequired,
-    getCurrentProfile: PropTypes.func.isRequired,
-    profile: PropTypes.object.isRequired
+Profile.propTypes = {
+  getProfileById: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    profile: state.profile
+const mapStateToProps = (state) => ({
+  profile: state.profile,
+  auth: state.auth
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-    ProfileForm
-);
+export default connect(mapStateToProps, { getProfileById })(Profile);
