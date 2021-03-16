@@ -111,7 +111,7 @@ const AddProjects = ({ addProjects, history }) => {
 };
 
 AddProjects.propTypes = {
-    ddExperience: PropTypes.func.isRequired
+    addProjects: PropTypes.func.isRequired
 };
 
 export default connect(null, { addProjects })(AddProjects);
